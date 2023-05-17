@@ -5,7 +5,7 @@
 		<nav class="flex flex-wrap items-center justify-center w-full mt-4 md:mt-0 md:w-auto">
 			<a href="/" class="mr-5 font-medium hover:text-gray-500">Home</a>
 			<a href="/about" class="mr-5 font-medium hover:text-gray-500">About</a>
-			<a href="/contact" class="font-medium hover:text-gray-500">Contact</a>
+			<a href="/form" class="font-medium hover:text-gray-500">Form</a>
 		</nav>
 
 		<div class="flex items-center mt-4 md:mt-0">
