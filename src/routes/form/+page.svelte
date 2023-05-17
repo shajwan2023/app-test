@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import type { Movie } from '$lib/models/movie';
-	import { supabase } from '$lib/supabase';
+	import { insertData } from '$lib/store/movieStore';
 
 	let movieObject: Movie = {
 		name: '',
@@ -10,30 +9,28 @@
 		img: ''
 	};
 
-	let loading = false;
-	let dataProduct: Movie[] = [];
-
-	const insertData = async () => {
-		const { data, error } = await supabase.from('movie').insert(movieObject);
-		console.log(data);
-		// alert('SUCCESS');
-		toast.push('Success!', {
-			theme: {
-				'--toastColor': 'mintcream',
-				'--toastBackground': 'rgba(72,187,120,0.9)',
-				'--toastBarBackground': '#2F855A'
-			}
-		});
+	const handleSubmit = async () => {
+		try {
+			await insertData({ movieObject });
+			alert('Success');
+			console.log('Data inserted successfully');
+			// Reset the movieObject after successful submission
+			movieObject = {
+				name: '',
+				title: '',
+				desc: '',
+				img: ''
+			};
+		} catch (error) {
+			console.error('Error inserting data', error);
+		}
 	};
-
-	//adding toast
-	const options = {};
 </script>
 
 <div class="max-w-3xl py-10 mx-auto font-bold">
 	<div class="border py-10 rounded">
 		<h1 class="text-center text-2xl uppercase">form</h1>
-		<form class="" action="" on:submit|preventDefault={insertData}>
+		<form class="" action="" on:submit|preventDefault={handleSubmit}>
 			<div class="flex flex-col gap-5 p-5">
 				<div>
 					<input
@@ -71,7 +68,6 @@
 					class="mt-5 block uppercase mx-auto shadow bg-slate-800 hover:bg-slate-700 focus:shadow-outline focus:slate-none text-white text-xs py-3 px-10 rounded"
 					>Add Movie</button
 				>
-				<SvelteToast {options} />
 			</div>
 		</form>
 	</div>

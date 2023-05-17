@@ -1,22 +1,16 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabase';
-	import type { Movie } from '$lib/models/movie';
 	import Card from './Card.svelte';
-	// import movies from '../store/movieStore';
-	// console.log($movies);
+	import { movieFunction } from '$lib/store/movieStore';
+	import type { Movie } from '$lib/models/movie';
 
-	let loading = false;
 	let dataMovies: Movie[] = [];
 
-	const movieFunction = async () => {
-		loading = true;
-		const { data } = await supabase.from('movie').select('*');
-		//   console.log(data)
-		dataMovies = data as Movie[]; // Type assertion
-		loading = false;
+	const loadData = async () => {
+		dataMovies = await movieFunction();
+		console.log(dataMovies);
 	};
 
-	movieFunction();
+	loadData();
 </script>
 
 <svelte:head>
@@ -28,12 +22,8 @@
 
 <div class="max-w-screen-lg mx-auto py-20 px-5 lg:px-0">
 	<div class="grid md:grid-cols-4 gap-5">
-		{#if loading}
-			loading.....
-		{:else}
-			{#each dataMovies as item}
-				<Card movie={item} />
-			{/each}
-		{/if}
+		{#each dataMovies as item}
+			<Card movie={item} />
+		{/each}
 	</div>
 </div>
