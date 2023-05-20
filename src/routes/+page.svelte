@@ -3,6 +3,7 @@
 	import { movieFunction } from '$lib/store/movieStore';
 	import type { Movie } from '$lib/models/movie';
 	import { movies, performSearch } from '$lib/store/movieStore';
+	import { onMount } from 'svelte';
 
 	let query = '';
 	let searchResults = [];

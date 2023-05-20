@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Movie } from '$lib/models/movie';
 	import { insertData } from '$lib/store/movieStore';
+	import { supabase } from '$lib/supabase';
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 
 	let movieObject: Movie = {
@@ -12,9 +13,19 @@
 
 	const handleSubmit = async () => {
 		try {
+			const file = movieObject.img.files[0];
+			console.log(file);
+			const { data, error } = await supabase.storage
+				.from('movieImage')
+				.upload(`images/${file.name}`, file);
+
+			if (error) {
+				console.error('Error uploading image:', error);
+				return;
+			}
+			movieObject.img = data.path;
 			await insertData({ movieObject });
 
-			// console.log('Data inserted successfully');
 			// Reset the movieObject after successful submission
 			movieObject = {
 				name: '',
@@ -70,8 +81,8 @@
 				</div>
 				<div>
 					<input
-						type="text"
-						bind:value={movieObject.img}
+						type="file"
+						on:change={(event) => (movieObject.img = event.target)}
 						placeholder="Enter URL image"
 						class="border rounded p-2 w-full font-normal"
 					/>
